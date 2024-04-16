@@ -66,28 +66,36 @@ DESIGN DECISION 1.1: WE WILL USE JSON FOR RETURNING DATA. Given we have decided 
 
 DESIGN DECISION 2: WE ARE NOT IMPLEMENTING AUTHENTICATION AND AUTHORIZATION. Although many APIs need these, there is nothing in the given project description indicating these are needed and we will not create unnecessary work. If prices changed based on user this would definitely be necessary.
 
+DESIGN DECISION 3: UTILIZE HTTP FOR TEST SIMPLICITY. There is nothing in the requirements indicating sensitive data needing HTTPS (such as if the prices differed depending user), 
 
-DESIGN DECISION 3: UTILIZE HTTP FOR TEST SIMPLICITY. There is nothing in the requirements indicating sensitive data (such as if the prices differed depending user), 
+DESIGN DECISION 4: USE [HTTP Client](https://http4s.org/v1/docs/client.html) by adding "ember-client" dependency. We are already using http4s so this is only increasing our dependencies slightly. We will also use [Retry middleware](https://http4s.org/v1/docs/client-middleware.html#retry) so that the client can recover from issues with smartcloud.
 
-DESIGN DECISION 4: WE WILL USE RFC 2616 STATUS CODES AND ADDITIONAL ERROR MESSAGES TO HELP THE CLIENT DETERMINE WHAT THE PROBLEM INVOLVES. 
+DESIGN DECISION 5: SIGNATURE CHANGE Added InstanceKindService.Exception to InstanceKindService getAll() signature so that exceptions can be passed.
 
+DESIGN DECISION 6 (Not implemented yet): WE WILL USE RFC 2616 STATUS CODES AND ADDITIONAL ERROR MESSAGES TO HELP THE CLIENT DETERMINE WHAT THE PROBLEM INVOLVES. 
+
+Possible Codes
 200 (OK)
-201 (Created)
 400 (Bad Request)
 404 (Not Found)
 405 (Method Not Allowed)
 406 (Not Acceptable)
 409 (Conflict)
-415 (Unsupported Media Type)
 500 (Internal Server Error)
 
-DESIGN DECISION 5
-Adding "ember-client" dependency. Already using http4s so this is only increasing our dependencies slightly.
+DESIGN DECISION 7 (not implemented yet): TESTING SUITE
 
 
 ## RUNNING CODE
 
-for dev (uses revolver plugin for auto recompiling on file change)
+### for production
+
+```
+sbt run
+```
+to test `curl --request GET 'http://localhost:8080/instance-kinds'`
+
+### for dev (uses revolver plugin for auto recompiling on file change)
 
 ```
 sbt 
