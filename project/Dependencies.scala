@@ -7,11 +7,13 @@ object Dependencies {
 
     val http4s     = "1.0.0-M29"
     val circe      = "0.15.0-M1"
+    val circeGenericExtras = "0.14.3"
     val logback    = "1.2.6"
     val pureConfig = "0.16.0"
 
     // Test
     val munit = "0.7.29"
+    val munitCatsEffect = "1.0.7"
 
     // Compiler
     val betterMonadicFor = "0.3.1"
@@ -23,6 +25,7 @@ object Dependencies {
     def http4s(module: String): ModuleID = "org.http4s" %% s"http4s-$module" % V.http4s
 
     val circe      = "io.circe"              %% "circe-generic"   % V.circe
+    val circeExtras = "io.circe"              %% "circe-generic-extras" % V.circeGenericExtras
     val logback    = "ch.qos.logback"         % "logback-classic" % V.logback
     val pureConfig = "com.github.pureconfig" %% "pureconfig"      % V.pureConfig
   }
@@ -30,6 +33,7 @@ object Dependencies {
   object T { // Test dependencies
     // Scala
     val munit = "org.scalameta" %% "munit" % V.munit % Test
+    val munitCatsEffect = "org.typelevel" %% "munit-cats-effect-3" % V.munitCatsEffect % Test
   }
 
   object C { // Compiler plugins

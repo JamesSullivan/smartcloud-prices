@@ -1,6 +1,7 @@
 package prices
 
 import cats.effect._
+import cats.implicits.toSemigroupKOps
 import com.comcast.ip4s.{ Ipv4Address, Port }
 import fs2.Stream
 
@@ -9,10 +10,13 @@ import org.http4s.server.middleware.Logger
 
 import prices.config.Config
 import prices.routes.InstanceKindRoutes
+import prices.routes.PriceRoutes
 import prices.HttpClient
 import prices.services._
 
 object Server {
+
+
 
   def serve(config: Config): Stream[IO, ExitCode] = {
 
@@ -26,8 +30,14 @@ object Server {
       httpClient
     )
 
+
+    val priceService  = SmartcloudPriceService.make[IO](
+      config.smartcloud,
+      httpClient
+    )
+
     val httpApp = (
-      InstanceKindRoutes[IO](instanceKindService).routes
+      InstanceKindRoutes[IO](instanceKindService).routes <+> PriceRoutes[IO](priceService).routes
     ).orNotFound
 
     Stream

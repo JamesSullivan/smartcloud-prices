@@ -14,7 +14,6 @@ import prices.services.InstanceKindService
 import prices.services.InstanceKindService.Exception.APICallFailure
 
 
-
 // Mock Tests that do not actually use smartcloud
 class InstanceKindRoutesTest extends FunSuite {
 
@@ -26,7 +25,7 @@ class InstanceKindRoutesTest extends FunSuite {
     val instanceKindRoutes = InstanceKindRoutes(instanceKindService)
     val (status, message) = (for {
       response <- instanceKindRoutes.routes.orNotFound.run(
-                Request(method = Method.GET, uri = Uri.unsafeFromString(instanceKindRoutes.prefixKinds))
+                Request(method = Method.GET, uri = Uri.unsafeFromString(instanceKindRoutes.prefix))
                   .withHeaders(Authorization(Credentials.Token(AuthScheme.Bearer, "Unauthorized attempt")))
               )
       message <- response.as[String]
@@ -36,7 +35,7 @@ class InstanceKindRoutesTest extends FunSuite {
     assertEquals(message, """401 Unauthorized""")
   }
 
-  test("InstanceKindRoutes Failure Case - 404 Not Found") {
+  test("InstanceKindRoutes Failure Case - 404 Not found") {
     val instanceKindService = new InstanceKindService[IO]() {
       override def getAll(): IO[Either[InstanceKindService.Exception, List[InstanceKind]]] = 
         IO(Left(APICallFailure("404 Not Found")))
@@ -63,7 +62,7 @@ class InstanceKindRoutesTest extends FunSuite {
     val instanceKindRoutes = InstanceKindRoutes(instanceKindService)
     val (status, message) = (for {
       response <- instanceKindRoutes.routes.orNotFound.run(
-                Request(method = Method.GET, uri = Uri.unsafeFromString(instanceKindRoutes.prefixKinds))
+                Request(method = Method.GET, uri = Uri.unsafeFromString(instanceKindRoutes.prefix))
                   .withHeaders(Authorization(Credentials.Token(AuthScheme.Bearer, "Pretend Authorized")))
               )
       message <- response.as[String]

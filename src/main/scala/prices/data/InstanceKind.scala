@@ -1,8 +1,9 @@
 package prices.data
 
-final case class InstanceKind(getString: String) extends AnyVal
 
-/** P.24 we can wrap a single field and extend the AnyVal abstract class to avoid some runtime costs
-  *
-  * Do we want to use smart constructors or sealed abstract classes or opague types (Scala 3) or even Refinement types
+/** machine instance kind wrapping a single field
+  * (extends the AnyVal abstract class to avoid some runtime costs)
+  * For more type safe alternatives we could have used smart constructors or sealed abstract 
+  * classes or opague types (Scala 3) or even Refinement types
   */
+final case class InstanceKind(getString: String) extends AnyVal

@@ -72,20 +72,22 @@ DESIGN DECISION 4: USE [HTTP Client](https://http4s.org/v1/docs/client.html) by 
 
 DESIGN DECISION 5: SIGNATURE CHANGE Added InstanceKindService.Exception to InstanceKindService getAll() signature so that exceptions can be passed. Simple exception should suffice, no need for multiple messages or stack traces.
 
-DESIGN DECISION 6 (Not implemented yet): WE WILL USE RFC 2616 STATUS CODES AND ADDITIONAL ERROR MESSAGES TO HELP THE CLIENT DETERMINE WHAT THE PROBLEM INVOLVES. 
+DESIGN DECISION 6: WE WILL USE RFC 2616 STATUS CODES AND ADDITIONAL ERROR MESSAGES TO HELP THE CLIENT DETERMINE WHAT THE PROBLEM INVOLVES. 
 
 Possible Codes
 200 (OK)
-400 (Bad Request)
+401 (Bad Request)
 404 (Not Found)
-405 (Method Not Allowed)
-406 (Not Acceptable)
-409 (Conflict)
+429 (Too Many Requests)
 500 (Internal Server Error)
 
-DESIGN DECISION 7 (started incomplete): TESTING SUITE
+DESIGN DECISION 7  Split up PriceResponse JSON encoding/decoding to be consistent with given code, but prefer all data types to have JSON encoder/decoder object
 
-DESIGN DECISION 8 (not implemented yet): Consider Tracking smartcloud usage versus 1000 daily limit
+DESIGN DECISION 8 (started incomplete): TESTING SUITE
+
+DESIGN DECISION 9 (not implemented yet): Consider Tracking smartcloud usage versus 1000 daily limit
+
+DESIGN DECISION 10 (not implemented yet): Stress Testing
 
 ## RUNNING CODE
 

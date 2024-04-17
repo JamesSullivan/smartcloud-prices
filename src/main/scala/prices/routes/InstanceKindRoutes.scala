@@ -13,9 +13,8 @@ import prices.services.InstanceKindService
 import prices.services.InstanceKindService.Exception.APICallFailure
 
 final case class InstanceKindRoutes[F[_]: Sync](instanceKindService: InstanceKindService[F]) extends Http4sDsl[F] {
-
-  val prefixKinds  = "/instance-kinds"
-  val prefixPrices = "/prices" // GET /prices?kind=sc2-micro
+  
+  val prefix  = "/instance-kinds"
 
   object KindParamMatcher extends QueryParamDecoderMatcher[String]("kind")
 
@@ -31,15 +30,9 @@ final case class InstanceKindRoutes[F[_]: Sync](instanceKindService: InstanceKin
         }
   }
 
-  private val prices: HttpRoutes[F] = HttpRoutes.of {
-    case GET -> Root :? KindParamMatcher(kind) =>
-      Ok("help " + kind)
-  }
-
   def routes: HttpRoutes[F] =
     Router(
-      prefixKinds -> get,
-      prefixPrices -> prices
+      prefix -> get
     )
 
 }

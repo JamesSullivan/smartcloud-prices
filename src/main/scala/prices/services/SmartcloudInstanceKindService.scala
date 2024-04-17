@@ -39,7 +39,7 @@ object SmartcloudInstanceKindService {
       httpClient.resource.use { client =>
         client.run(request).use {
           case Successful(response) =>
-            response.as[List[String]].map((payload: List[String]) => Right(payload.map(InstanceKind)))
+            response.as[List[String]].map((messages: List[String]) => Right(messages.map(InstanceKind)))
           case response =>
             val result: Either[InstanceKindService.Exception, List[InstanceKind]] =
               Left(InstanceKindService.Exception.APICallFailure(response.status.toString()))
