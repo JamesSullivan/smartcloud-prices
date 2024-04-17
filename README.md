@@ -55,7 +55,7 @@ In actual production we might prefer the more secure latest LTS JDK and changes 
 
 ASSUMPTION 2: THERE ARE NOT ANY RELEVANT INDUSTRY OR DEFACTO API STANDARDS SPECIFICALLY FOR CLOUD MACHINE INSTANCE PRICING THAT SHOULD BE FOLLOWED. The APIs used by AWS, Google Cloud, Azure, IBM, etc. all appear to be different, but we note that they mostly use REST APIs.
 
-ASSUMPTION 3: GIVEN THE /get-instances QUERY THE LIST OF AVAILABLE INSTANCES IS DYNAMIC AND COULD CHANGE AT ANY TIME.  We cannot cache available instances nor can we hardcode checking of instance-type QueryParam before submitting to smartcloud endpoint. The prices are also considered to be very dynamic
+ASSUMPTION 3: GIVEN THE /get-instances QUERY THE LIST OF AVAILABLE INSTANCES IS DYNAMIC AND COULD CHANGE AT ANY TIME.  We cannot cache available instances nor can we hardcode checking of instance-type QueryParam before submitting to smartcloud endpoint. The prices are also considered to be very dynamic. If we knew otherwise we would consider caching for performance and usage reasons.
 
 
 ## DESIGN DECISIONS
@@ -66,11 +66,11 @@ DESIGN DECISION 1.1: WE WILL USE JSON FOR RETURNING DATA. Given we have decided 
 
 DESIGN DECISION 2: WE ARE NOT IMPLEMENTING AUTHENTICATION AND AUTHORIZATION. Although many APIs need these, there is nothing in the given project description indicating these are needed and we will not create unnecessary work. If prices changed based on user this would definitely be necessary.
 
-DESIGN DECISION 3: UTILIZE HTTP FOR TEST SIMPLICITY. There is nothing in the requirements indicating sensitive data needing HTTPS (such as if the prices differed depending user), 
+DESIGN DECISION 3: UTILIZE HTTP FOR TEST SIMPLICITY. There is nothing in the requirements indicating sensitive data needing HTTPS (such as if the prices differed depending user). However, outside this job interview scenario we would use HTTPS as it is the default for the web now.
 
-DESIGN DECISION 4: USE [HTTP Client](https://http4s.org/v1/docs/client.html) by adding "ember-client" dependency. We are already using http4s so this is only increasing our dependencies slightly. We will also use [Retry middleware](https://http4s.org/v1/docs/client-middleware.html#retry) so that the client can recover from issues with smartcloud.
+DESIGN DECISION 4: USE [HTTP Client](https://http4s.org/v1/docs/client.html) by adding "ember-client" dependency. We are already using http4s so this is only increasing our dependencies slightly. As the calls to smartcloud are idempotent we will also use [Retry middleware](https://http4s.org/v1/docs/client-middleware.html#retry) so that the client can recover from any issues.
 
-DESIGN DECISION 5: SIGNATURE CHANGE Added InstanceKindService.Exception to InstanceKindService getAll() signature so that exceptions can be passed.
+DESIGN DECISION 5: SIGNATURE CHANGE Added InstanceKindService.Exception to InstanceKindService getAll() signature so that exceptions can be passed. Simple exception should suffice, no need for multiple messages or stack traces.
 
 DESIGN DECISION 6 (Not implemented yet): WE WILL USE RFC 2616 STATUS CODES AND ADDITIONAL ERROR MESSAGES TO HELP THE CLIENT DETERMINE WHAT THE PROBLEM INVOLVES. 
 
@@ -83,8 +83,9 @@ Possible Codes
 409 (Conflict)
 500 (Internal Server Error)
 
-DESIGN DECISION 7 (not implemented yet): TESTING SUITE
+DESIGN DECISION 7 (started incomplete): TESTING SUITE
 
+DESIGN DECISION 8 (not implemented yet): Consider Tracking smartcloud usage versus 1000 daily limit
 
 ## RUNNING CODE
 
@@ -115,6 +116,7 @@ when already in SBT
 
 ```console```      REPL
 
+```test```         Run test suite
 
 
 
